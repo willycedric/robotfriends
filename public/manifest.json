@@ -1,6 +1,7 @@
 {
   "short_name": "React App",
-  "name": "Create React App Sample",
+  "name": "Robot with friends",
+  "description":"A place where robots meet their friends",
   "icons": [
     {
       "src": "favicon.ico",
