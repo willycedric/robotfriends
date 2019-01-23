@@ -1,31 +1,34 @@
 import React, { Component } from 'react';
-import { connect} from 'react-redux';
+import { connect } from 'react-redux';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { setSearchField, requestRobots } from '../actions';
 import CardList from '../components/CardList';
 import SearchBox from '../components/SearchBox';
 import Scroll from '../components/Scroll';
 import Header from '../components/Header';
+import RobotDetails from './RobotDetails';
 import ErrorBoundry from '../components/ErrorBoundry';
+//import { robots as data } from './../robots';
 import './App.css';
-const mapStateToProps = state =>{
+const mapStateToProps = state => {
     return {
-        searchField:state.searchRobots.searchField,
+        searchField: state.searchRobots.searchField,
         robots: state.requestRobots.robots,
         isPending: state.requestRobots.isPending,
-        error:state.requestRobots.error
+        error: state.requestRobots.error
     };
 }
 
-const mapDispatchToProps = (dispatch) =>{
+const mapDispatchToProps = (dispatch) => {
     return {
         onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
-        onRequestRobots:()=>dispatch(requestRobots())
+        onRequestRobots: () => dispatch(requestRobots())
     };
 }
 class App extends Component {
 
-   componentDidMount() {
-       
+    componentDidMount() {
+
         this.props.onRequestRobots();
     }
     render() {
@@ -35,13 +38,27 @@ class App extends Component {
             <h1>Loading ...</h1>
         </div>) : (
                 <div className='tc'>
-                   <Header />
-                    <SearchBox searchChange={onSearchChange} />
-                    <Scroll>
-                        <ErrorBoundry>
-                            <CardList robots={filteredRobot} />
-                        </ErrorBoundry>
-                    </Scroll>
+
+                    <Router>
+                        <Switch>
+                            <ErrorBoundry>
+                                <Route exact path='/' render={() => (
+                                    <div>
+                                        <Header />
+                                        <SearchBox searchChange={onSearchChange} />
+                                        <Scroll>
+                                            <CardList robots={filteredRobot} />
+                                        </Scroll>
+                                    </div>
+                                )} />
+                                <Route exact path='/robot/:id' render={(props) => {
+                                    let id = parseInt(props.location.pathname.replace('/robot/', '')) - 1;
+                                    //console.log(JSON.stringify(robots, null, 4));                                  
+                                    return isPending?(<h1>Loading ...</h1>):<RobotDetails id={id} />
+                                }} />
+                            </ErrorBoundry>
+                        </Switch>
+                    </Router>
                 </div>
             );
     }
