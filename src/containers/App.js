@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { setSearchField, requestRobots } from '../actions';
 import CardList from '../components/CardList';
 import SearchBox from '../components/SearchBox';
 import Scroll from '../components/Scroll';
 import Header from '../components/Header';
-import RobotDetails from './RobotDetails';
-import ErrorBoundry from '../components/ErrorBoundry';
+// import RobotDetails from './RobotDetails';
+// import ErrorBoundry from '../components/ErrorBoundry';
 //import { robots as data } from './../robots';
 import './App.css';
 const mapStateToProps = state => {
@@ -27,7 +26,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 class App extends Component {
 
-    componentDidMount() {
+    componentWillMount() {
 
         this.props.onRequestRobots();
     }
@@ -38,27 +37,13 @@ class App extends Component {
             <h1>Loading ...</h1>
         </div>) : (
                 <div className='tc'>
-
-                    <Router>
-                        <Switch>
-                            <ErrorBoundry>
-                                <Route exact path='/' render={() => (
-                                    <div>
-                                        <Header />
-                                        <SearchBox searchChange={onSearchChange} />
-                                        <Scroll>
-                                            <CardList robots={filteredRobot} />
-                                        </Scroll>
-                                    </div>
-                                )} />
-                                <Route exact path='/robot/:id' render={(props) => {
-                                    let id = parseInt(props.location.pathname.replace('/robot/', '')) - 1;
-                                    //console.log(JSON.stringify(robots, null, 4));                                  
-                                    return isPending?(<h1>Loading ...</h1>):<RobotDetails id={id} />
-                                }} />
-                            </ErrorBoundry>
-                        </Switch>
-                    </Router>
+                    <div>
+                        <Header />
+                        <SearchBox searchChange={onSearchChange} />
+                        <Scroll>
+                            <CardList robots={filteredRobot} />
+                        </Scroll>
+                    </div>
                 </div>
             );
     }

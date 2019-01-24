@@ -2,20 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
-import { searchRobots, requestRobots, requestOneRobot } from '../src/reducers'
+import { searchRobots, requestRobots } from '../src/reducers'
 import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import './index.css';
-import App from './containers/App';
+import routes from './routes';
 import * as serviceWorker from './serviceWorker';
 import 'tachyons';
 const logger = createLogger();
-const rootReducer = combineReducers({searchRobots, requestRobots, requestOneRobot})
+const rootReducer = combineReducers({searchRobots, requestRobots})
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, logger))
 ReactDOM.render(
     
         <Provider  store={store}>
-            <App />
+           {routes}
+          
         </Provider>   
     , document.getElementById('root'));
 
@@ -23,3 +24,4 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
 serviceWorker.unregister();
+window.store = store
